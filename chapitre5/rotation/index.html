@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <title>Rotation</title>
+    <meta charset="UTF-8">
+  </head>
+  
+  <body>
+    <div style="height: 100%; display: flex; flex-direction: column;
+                align-items: center; justify-content: center;">
+      <canvas id="canvasImg" width="128" height="128"
+              style="border: 5px solid black; margin: 50px;">
+      </canvas>
+      <button id="btnRotation"
+              style="border: none; padding: 8px 14px; font-size: 16px;">
+        Rotation
+      </button>
+    </div>
+    <script>
+     // Ne fonctionnera pas en local pour des raisons de sécurité
+     // Lancer un serveur, par ex. avec python3 -m http.server 8000
+     var bouton = document.getElementById("btnRotation");
+     var canvas = document.getElementById("canvasImg");
+     var ctx    = canvas.getContext("2d");
+     var img    = new Image();
+     
+     img.src    = "logo.png";
+     img.onload = function() {
+         ctx.drawImage(img, 0, 0);
+     };
+     
+     bouton.addEventListener("click", () => rotation());
+     
+     function inverser(x1, y1, x2, y2, n)
+     {
+         // Récupérer le tableau 1D des pixels
+         var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+         var data      = imageData.data;
+         
+         // Inverser les blocs n x n aux positions (x1, y1) et (x2, y2)
+         for (var i = 0; i < n; i++) {
+             for (var j = 0; j < n; j++) {
+                 var pos1 = 4 * ((y1 + i) * canvas.width + (x1 + j));
+                 var pos2 = 4 * ((y2 + i) * canvas.width + (x2 + j));
+
+                 // Inverser les 4 octets du pixel
+                 for (var k = 0; k < 4; k++) {
+                     data[pos2 + k] ^= data[pos1 + k];
+                     data[pos1 + k] ^= data[pos2 + k];
+                     data[pos2 + k] ^= data[pos1 + k];
+                 }
+             }
+         }
+
+         // Mettre image à jour
+         ctx.putImageData(imageData, 0, 0);
+     }
+     
+     function rotation()
+     {
+         const delai = 1000;
+         
+         function rotation_(x, y, n)
+         {
+             if (n > 1) {
+                 var m = n / 2;
+                 
+                 // Rotation récursive des blocs
+                 setTimeout(() => {
+                     // Rotation locale des blocs
+                     rotation_(x,     y,     m);
+                     rotation_(x + m, y,     m);
+                     rotation_(x,     y + m, m);
+                     rotation_(x + m, y + m, m);
+                     
+                     // Rotation globale des blocs    // A B --> B A
+                     inverser(x, y, x + m, y,     m); // C D     C D
+                     inverser(x, y, x + m, y + m, m); //
+                     inverser(x, y, x,     y + m, m); //     --> D A --> C A
+                 }, delai);                           //         C B     D B
+             }
+         }
+         
+         rotation_(0, 0, canvas.width);
+     }
+    </script>
+  </body>
+</html>
