@@ -1,0 +1,156 @@
+<html>
+  <head>
+    <title>Pavage</title>
+  </head>
+  
+  <body>
+    <div style="text-align: center;">
+      <canvas id="canvasAlgo" width="740" height="740"
+              style="border: 5px solid black;">
+      </canvas>
+      <div style="padding-top: 20px; display: flex;
+                  justify-content: center; align-items: center;">
+          <input type="range" min="0" max="10" value="3" id="sliderTaille"
+                 style="width: 660; margin-right: 14px;">
+          <button id="btnPaver"
+                  style="border: none; padding: 8px 14px; font-size: 16px;">
+              Paver
+          </button>
+      </div>
+    </div>
+
+    <script>
+     var slider = document.getElementById("sliderTaille");
+     var bouton = document.getElementById("btnPaver");
+     let canvas = document.getElementById("canvasAlgo");
+     let ctx    = canvas.getContext("2d");
+
+     let grille = {x: 0,
+                   y: 0,
+                   taille: 2**slider.value,
+                   trou:   {x: 0, y: 0}}
+     
+     let saut = () => (canvas.width / grille.taille);
+
+     canvas.addEventListener("click",  (e) => marquer(e));
+     slider.addEventListener("change", ()  => redimensionner());
+     bouton.addEventListener("click",  ()  => repaver());
+
+     function marquer(evenement)
+     {
+         let conv = (v) => Math.floor(grille.taille / canvas.width * v);
+         let rect = canvas.getBoundingClientRect(); 
+
+         grille.trou.x = conv(evenement.clientX - rect.left);
+         grille.trou.y = conv(evenement.clientY - rect.top);
+         
+         marquerPosition();
+     }
+
+     function redimensionner()
+     {
+         grille.taille = 2**slider.value;
+
+         marquerPosition();
+     }
+
+     function repaver() {
+         marquerPosition();
+         paver(grille);
+     }
+
+     function marquerPosition()
+     {
+         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+         ctx.strokeStyle = "red";
+         ctx.lineWidth   = saut() / 4;
+         
+         let pos = grille.trou;
+
+         ctx.beginPath();
+         ctx.moveTo((pos.x + 0.125) * saut(), (pos.y + 0.125) * saut());
+         ctx.lineTo((pos.x + 0.875) * saut(), (pos.y + 0.875) * saut());
+         ctx.moveTo((pos.x + 0.125) * saut(), (pos.y + 0.875) * saut());
+         ctx.lineTo((pos.x + 0.875) * saut(), (pos.y + 0.125) * saut());
+         ctx.stroke()
+     }
+
+     function dessinerTuile(centre, couleur, dir)
+     {
+         let debut = true;
+         let ajouterPoint = (i, j) => {
+             if (debut) {
+                 ctx.moveTo(i * saut(), j * saut());
+                 debut = false;
+             }
+             else {
+                 ctx.lineTo(i * saut(), j * saut());
+             }
+         };
+         
+         ctx.fillStyle = couleur;
+         ctx.beginPath();
+         ajouterPoint(centre.x,         centre.y);
+         ajouterPoint(centre.x + dir.x, centre.y);
+         ajouterPoint(centre.x + dir.x, centre.y - dir.y);
+         ajouterPoint(centre.x - dir.x, centre.y - dir.y);
+         ajouterPoint(centre.x - dir.x, centre.y + dir.y);
+         ajouterPoint(centre.x,         centre.y + dir.y);
+         ctx.closePath();
+         ctx.fill();
+
+         ctx.lineWidth   = saut() / 16;
+         ctx.strokeStyle = "white";
+         ctx.stroke();
+     }
+
+     function contient(grille, position)
+     {
+         return (grille.x   <= position.x               &&
+                 position.x <  grille.x + grille.taille &&
+                 grille.y   <= position.y               &&
+                 position.y <  grille.y + grille.taille);
+     }
+
+     function paver(grille)
+     {
+         if (grille.taille == 1)
+             return;
+         
+         // Ajouter tuile au centre
+         let centre    = {x: grille.x + grille.taille / 2,
+                          y: grille.y + grille.taille / 2};
+
+         let couleur   = "#" + Math.floor(Math.random() * 2**24).toString(16);
+
+         let direction = {x: grille.trou.x < centre.x ? -1 : 1,
+                          y: grille.trou.y < centre.y ? -1 : 1}
+         
+         dessinerTuile(centre, couleur, direction);
+
+         // Paver reste de la grille récursivement
+         let n = grille.taille / 2;
+         
+         let sousGrilles = [
+             {x: grille.x, y: grille.y, taille: n, trou: {x: centre.x - 1,
+                                                          y: centre.y - 1}},
+             {x: grille.x, y: centre.y, taille: n, trou: {x: centre.x - 1,
+                                                          y: centre.y}},
+             {x: centre.x, y: centre.y, taille: n, trou: {x: centre.x,
+                                                          y: centre.y}},
+             {x: centre.x, y: grille.y, taille: n, trou: {x: centre.x,
+                                                          y: centre.y - 1}}
+         ]
+
+         for (let g of sousGrilles) {
+             if (contient(g, grille.trou)) {
+                 g.trou = grille.trou;
+             }
+
+             setTimeout(() => paver(g), 500);
+         }
+     }
+    </script>
+  </body>
+</html>

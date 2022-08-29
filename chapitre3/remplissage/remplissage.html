@@ -1,0 +1,138 @@
+<html>
+  <head>
+    <title>Remplissage</title>
+  </head>
+  
+  <body>
+    <div style="text-align: center;">
+      <br />
+      <canvas id="canvasAlgo" width="512" height="512"
+              style="border: 5px solid black;">
+      </canvas>
+      <div style="padding-top: 20px; display: flex;
+                  justify-content: center; align-items: center;">
+          <input type="range" min="0" max="5" value="3" id="sliderTaille"
+                 style="width: 225; margin-right: 14px;">
+
+          <select name="colMode" id="colMode">
+            <option value="dessiner">Dessiner</option>
+            <option value="remplir_dfs">Remplir (profondeur)</option>
+            <option value="remplir_bfs">Remplir (largeur)</option>
+          </select>
+
+          <select name="colChoix" id="colChoix">
+            <option value="black">Noir</option>
+            <option value="white">Blanc</option>
+            <option value="red">Rouge</option>
+            <option value="blue">Bleu</option>
+            <option value="green">Vert</option>
+            <option value="orange">Orange</option>
+            <option value="purple">Mauve</option>
+          </select>
+      </div>
+    </div>
+
+    <script>
+     var slider    = document.getElementById("sliderTaille");
+     let canvas    = document.getElementById("canvasAlgo");
+     let col_choix = document.getElementById("colChoix");
+     let col_mode  = document.getElementById("colMode");
+     let ctx       = canvas.getContext("2d");
+     let grille    = {contenu: {}, taille:  0};
+     let animation;
+     
+     let saut = () => (canvas.width / grille.taille);
+
+     canvas.addEventListener("click",  (e) => marquer(e));
+     slider.addEventListener("change", ()  => redimensionner());
+
+     redimensionner();
+
+     function marquer(evenement)
+     {
+         let conv   = (v) => Math.floor(grille.taille / canvas.width * v);
+         let rect   = canvas.getBoundingClientRect();
+         let x      = conv(evenement.clientX - rect.left);
+         let y      = conv(evenement.clientY - rect.top);
+         let action = (col_mode.value == "dessiner" ? changerPixel : remplir);
+
+         clearInterval(animation);
+
+         action(x, y, col_choix.value);
+     }
+
+     function redimensionner()
+     {    
+         clearInterval(animation);
+
+         grille.taille = 2**slider.value;
+
+         for (let x = 0; x < grille.taille; x++) {
+             grille.contenu[x] = {};
+             
+             for (let y = 0; y < grille.taille; y++) {
+                 grille.contenu[x][y] = "white";
+             }
+         }
+
+         ctx.clearRect(0, 0, canvas.width, canvas.height);
+     }
+
+     function changerPixel(x, y, couleur)
+     {
+         grille.contenu[x][y] = couleur;
+         
+         ctx.fillStyle   = couleur;
+         ctx.strokeStyle = couleur;
+         ctx.fillRect(x * saut(), y * saut(), saut(), saut());
+     }
+
+     function contient(x, y)
+     {
+         return (0 <= x && x < grille.taille &&
+                 0 <= y && y < grille.taille);
+     }
+
+     function extraire(s) {
+         return (col_mode.value == "remplir_dfs" ? s.pop() : s.shift());
+     }
+
+     function remplir(x, y, couleur)
+     {
+         let a_remplacer = grille.contenu[x][y];
+         let a_traiter   = [[x, y]];
+         let est_remplie = (i, j) => (grille.contenu[i][j] != a_remplacer);
+
+         // Traiter une cellule à remplir
+         let traiter = function() {
+             if (a_traiter.length > 0) {
+                 // Trouver prochaine cellule non remplie (s'il en existe une)
+                 let i, j;
+
+                 do {
+                     [i, j] = extraire(a_traiter);
+                 } while (est_remplie(i, j) && a_traiter.length > 0);
+             
+                 // Remplir la cellule (s'il faut le faire)
+                 if (!est_remplie(i, j)) {
+                     changerPixel(i, j, couleur);
+
+                     // Explorer les voisins
+                     for (let [dx, dy] of [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
+                         let [i_, j_] = [i + dx, j + dy];
+                         
+                         if (contient(i_, j_) && !est_remplie(i_, j_))
+                             a_traiter.push([i_, j_]);
+                     }
+                 }
+             }
+             else {
+                 clearInterval(animation);
+             }
+         };
+
+         animation = setInterval(traiter, 100);
+     }
+    </script>
+  </body>
+</html>
