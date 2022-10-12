@@ -115,7 +115,7 @@ Proposition. Un sommet v est traité durant la i-ème itération de la boucle «
 ```
 
 Démontrons la proposition par induction sur _i_. L'unique sommet
-traité durant la premire itération (_i = 1_) est le premier niveau. De
+traité durant la première itération (_i = 1_) est le premier niveau. De
 plus, le premier niveau est l'unique sommet à distance _0_ de
 lui-même.
 
