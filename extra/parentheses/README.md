@@ -16,8 +16,8 @@ contractions(p, T):
     retourner (p[1] = x)
   sinon:
     pour i ∈ [1..|p|-1]:
-      gauche ← s[1 : i-1]
-      centre ← T[p[i], p[i+1]]
+      gauche ← p[1 : i-1]
+      centre ← [T[p[i], p[i+1]]
       droite ← p[i+2 : |p|]
 
       si contractions(gauche + centre + droite):
@@ -52,7 +52,7 @@ contractions_avecmem(p, T):
 
         pour i ∈ [1..|s|-1]:
           gauche ← s[1 : i-1]
-          centre ← T[s[i], s[i+1]]
+          centre ← [T[s[i], s[i+1]]
           droite ← s[i+2 : |s|]
 
           si contractions'(gauche + centre + droite):
