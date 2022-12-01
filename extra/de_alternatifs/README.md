@@ -61,7 +61,7 @@ En général, voici la distribution obtenue:
 |*1*|*2*|*3*|*4*|*5*|*6*|
 |---|---|---|---|---|---|
 |1/8|1/8|1/4|1/4|1/8|1/8|
-|0.125|0.125|0.125|0.250|0.250|0.125|0.125|0.125|
+|0.125|0.125|0.250|0.250|0.125|0.125|0.125|0.125|
 
 L'espérance du nombre de lancers de pièces est de 3.5, ce
 qui est mieux que l'algorithme vu en classe dont l'espérance est 4:
@@ -144,7 +144,7 @@ qui est mieux que l'algorithme vu en classe dont l'espérance est 4:
                |     |   espérance de la boucle
                |     |         |
                |     |         |
-               v    vvv    vvvvvvvvvvvv
+               v    vvv    vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 𝔼[# lancers] = 3 + (1/4) · ((1/2)¹ · 1 + (1/2)² · 2 + (1/2)³ · 3 + ...)
              = 3 + (1/4) · 2
              = 3.5
