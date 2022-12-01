@@ -73,4 +73,5 @@ E[# lancers] = 3 + (1/4) · (1 / (1 / 2))
 
 Pour les personnes intéressées, voici une modélisation dans le langage
 de l'outil [PRISM](http://www.prismmodelchecker.org/):
-``[sol2.prism](sol2.prism)``, ``[propietes.pctl](proprietes.pctl)``.
+[``sol2.prism``](./sol2.prism),
+[``propietes.pctl``](./proprietes.pctl).
