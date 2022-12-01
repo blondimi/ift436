@@ -74,7 +74,7 @@ qui est mieux que l'algorithme vu en classe dont l'espérance est 4:
                |     |   espérance de la boucle
                |     |         |
                |     |         |
-               v    vvv    vvvvvvvvvvvv
+               v    vvv    vvvvvvvvvvvvv
 𝔼[# lancers] = 3 + (1/4) · (1 / (1 / 2))
              = 3 + (1/4) · 2
              = 3.5
