@@ -1,6 +1,6 @@
 # Simuler un dé à 6 faces avec un lancer de pièce par itération
 
-Rappelons qu'en classe un étudiant a demandé si l'algorithme ci-dessous
+Rappelons qu'en classe (A21) un étudiant a demandé si l'algorithme ci-dessous
 fait mieux que les deux algorithmes du #5(a) de l'[examen final de 2020](https://info.usherbrooke.ca/mblondin/cours/ift436_a21/etude/final_a20.pdf).
 Voyons si c'est le cas.
 
