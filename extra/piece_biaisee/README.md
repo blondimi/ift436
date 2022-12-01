@@ -28,7 +28,7 @@ sinon:    retourner "face"
 
 ## Analyse à l'aide d'un graphe de probabilités
 
-En classe, j'ai tenté en vain d'analyser l'algorithme, pour le cas
+En classe (A21), j'ai tenté en vain d'analyser l'algorithme, pour le cas
 particulier où _p = 1/3_, à l'aide de ce graphe de probabilités (mieux
 connu sous le nom savant de _[chaîne de Markov à temps
 discret](https://fr.wikipedia.org/wiki/Cha%C3%AEne_de_Markov)_):
