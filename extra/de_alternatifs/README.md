@@ -135,7 +135,17 @@ L'espérance du nombre de lancers de pièces est de 3.5, ce
 qui est mieux que l'algorithme vu en classe dont l'espérance est 4:
 
 ```
-[en construction...]
+           nombre de lancers initiaux
+               |
+               | probabilité d'obtenir 000 ou 111
+               |     |
+               |     |   espérance de la boucle
+               |     |         |
+               |     |         |
+               v    vvv    vvvvvvvvvvvv
+𝔼[# lancers] = 3 + (1/4) · ((1/2)¹ · 1 + (1/2)² · 2 + (1/2)³ · 3 + ...)
+             = 3 + (1/4) · 2
+             = 3.5
 ```
 
 ## Modélisation avec PRISM
