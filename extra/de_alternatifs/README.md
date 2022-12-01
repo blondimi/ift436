@@ -38,8 +38,8 @@ Sortie: nombre distribué uniformément parmi [1..6]
   retourner 4·y₂ + 2·y₁ + y₀
 ```
 
-La probabilité de générer 4, c.-à-d. la chaîne 100, n'est pas de 1/6,
-mais bien de 1/4:
+Cette procédure est biaisée. Par exemple, la probabilité de générer 4,
+c.-à-d. la chaîne ```100```, n'est pas de 1/6, mais bien de 1/4:
 
 ```
 obtenir directement 100
@@ -48,13 +48,20 @@ obtenir directement 100
     |        |          en 1 ou 2 ou 3 ou ... itérations
     v        v
   (1/2)³ + (1/2)³ · ((1/2)¹ + (1/2)² + (1/2)³ + ...)
-  
+
 = 1/8 + 1/8 · 1
 
 = 1/4
 ```
 
-Néanmons, l'espérance du nombre de lancers de pièces est de 3.5, ce
+En général, voici la distribution obtenue:
+
+|*1*|*2*|*3*|*4*|*5*|*6*|
+|---|---|---|---|---|---|
+|1/8|1/8|1/4|1/4|1/8|1/8|
+
+
+L'espérance du nombre de lancers de pièces est de 3.5, ce
 qui est mieux que l'algorithme vu en classe dont l'espérance est 4:
 
 ```
@@ -66,12 +73,12 @@ qui est mieux que l'algorithme vu en classe dont l'espérance est 4:
                |     |         |
                |     |         |
                v    vvv    vvvvvvvvvvvv
-E[# lancers] = 3 + (1/4) · (1 / (1 / 2))
+𝔼[# lancers] = 3 + (1/4) · (1 / (1 / 2))
              = 3 + (1/4) · 2
              = 3.5
 ```
 
-Pour les personnes intéressées, voici une modélisation dans le langage
+Pour les personnes curieuses, voici une modélisation dans le langage
 de l'outil [PRISM](http://www.prismmodelchecker.org/):
 [``sol2.prism``](./sol2.prism),
 [``propietes.pctl``](./proprietes.pctl).
