@@ -1,0 +1,16 @@
+P=? [ F ("un"|"deux"|"trois"|"quatre"|"cinq"|"six") ]
+
+P=? [ F "un" ]
+
+P=? [ F "deux" ]
+
+P=? [ F "trois" ]
+
+P=? [ F "quatre" ]
+
+P=? [ F "cinq" ]
+
+P=? [ F "six" ]
+
+R{"nombre_lancers"}=? [ F ("un"|"deux"|"trois"|"quatre"|"cinq"|"six") ]
+
