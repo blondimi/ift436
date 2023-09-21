@@ -14,13 +14,12 @@ def tri_binaire(s):
 
         if j <= i:
             j = i + 1
+
+    return s
             
 # Exemple
 if __name__ == "__main__":
     s = [0, 1, 0, 0, 1, 0, 1]
 
-    print(s)
-
-    tri_binaire(s)
-
-    print(s)
+    print("Avant tri:", s)
+    print("Après tri:", tri_binaire(s))
