@@ -2,7 +2,7 @@ def tri_binaire(s):
     i = 0
     j = 1
 
-    # Invariant: i < j et s[1   : i-1] ne contient que des 0 et
+    # Invariant: i < j et s[0   : i-1] ne contient que des 0 et
     #                     s[i+1 : j-1] ne contient que des 1
     while j < len(s):
         if s[i] == 0:
