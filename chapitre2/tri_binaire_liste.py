@@ -35,5 +35,5 @@ def tri_binaire_liste(s):
 if __name__ == "__main__":
     s = Elem(0, Elem(1, Elem(0, Elem(0, Elem(1, Elem(0, Elem(1)))))))
 
-    print(s)
-    print(tri_binaire_liste(s))
+    print("Avant tri:", s)
+    print("Après tri:", tri_binaire_liste(s))
