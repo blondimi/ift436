@@ -1,6 +1,10 @@
-# De l'algorithme de Kahn aux étoiles
+# Solutions itératives et récursives
 
-Deux étudiants ont proposé un algorithme intéressant afin de calculer
+Plusieurs solutions en Python sont disponibles [ici](./algos.py). Attention, certaines fonctionnent en temps exponentiel (voir les commentaires).
+
+# Solution inspirée de l'algorithme de Kahn
+
+Deux étudiants (A21) ont proposé un algorithme intéressant afin de calculer
 le nombre maximal d'étoiles qu'on peut obtenir dans un jeu bien conçu.
 Leur approche se décrit succinctement comme suit:
 
