@@ -5,6 +5,67 @@ Un élément est _d-progressif_ si...
 # Tri pair-impair
 
 ```
+Proposition ?. Au début de la passe i+1, les i occurrences de 2 les plus à droite sont d-progressifs.
+```
+
+         v
+Avant: ⋯ 2 2—0 0* 2—0 0* ⋯ 2—0 0* ⋯ 2 2 ⋯ 2
+Après: ⋯ 2—0 2—0 0* 2—0 0* ⋯ 2—0* ⋯ 2 2 ⋯ 2
+         ^
+
+         v
+Avant: ⋯ 2—0 0* 2—0 0* 2—0 0* ⋯ 2—0 0* ⋯ 2 2 ⋯ 2
+Après: ⋯ 0 2—0 0* 2—0 0* 2—0 0* ⋯ 2—0* ⋯ 2 2 ⋯ 2
+           ^
+
+```
+Proposition ?. Soit k la quantité de 2. Au début de la passe k+2, l'unique 1 est d-progressif.
+```
+
+Par la proposition ?, au début de la passe k+1, tous les 2 sont d-progressifs.
+
+
+Soit j la position de l'une des i occurrences de 2 les plus à droite au début de la passe i.
+
+*Cas 1*
+```
+                   j
+                   v
+ Avant la passe i: 2 x—y ⋯
+ Après la passe i: 2—min(x, y) max(x, y)⋯
+```
+
+Si 2 > min(x, y), alors l'élément est d-progressif. Sinon, nous avons 2 = min(x, y) et ainsi x = y = 2.
+Cela signifie que y était d-progressif au début de la passe. Par hypothèse d'induction, tous les éléments
+à la droite de y sont des 2. Cela signifie que la séquence ne contient que des 2, ce qui est une contradiction.
+
+*Cas 2*
+```
+                     v
+ Avant la passe i: ⋯ 2—2 y⋯
+ Après la passe i: ⋯ 2 2—y ⋯
+```
+
+```
+                     v
+ Avant la passe i: ⋯ 2—x y—z ⋯
+ Après la passe i: ⋯ x 2—y z⋯
+                       ^
+```
+
+
+
+des i plus grands éléments au début de la passe i. Nous devons montrer que x
+est d-progressif après l'exécution de la passe i. Nous considérons tous les cas de
+configurations avant la passe i.
+
+ ⋯ 2—0 0* 2—0 0* ⋯ 2—0 0* 2 2 ⋯ 2
+
+
+
+
+
+```
 Proposition ?. Au début de la passe i+1, les i plus grands éléments sont d-progressifs.
 ```
 
@@ -55,8 +116,13 @@ maintenant supérieurs ou égaux. Ainsi, x est d-progressif.
 
 Cas 4: ⋯ y—x ⋯.
 
-Si y > x, alors après la passe i nous avons ⋯x y⋯
+Si y ≤ x, alors après la passe i nous avons ⋯y x⋯ [OK, ce cas se gère...]
 
+Si y > x
+
+Avant:  y—z x ⋯
+Avant:  ⋯ y—x ⋯
+Après:   ⋯x y⋯
 
 ---
 
