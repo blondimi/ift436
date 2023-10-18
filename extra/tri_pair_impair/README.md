@@ -5,24 +5,97 @@ Un élément est _d-progressif_ si...
 # Tri pair-impair
 
 ```
-Proposition ?. Au début de la passe i+1, les i occurrences de 2 les plus à droite sont d-progressifs.
+Proposition A. Au début de la passe i+1, les i occurrences de 2 les plus à droite sont d-progressifs.
 ```
 
-         v
-Avant: ⋯ 2 2—0 0* 2—0 0* ⋯ 2—0 0* ⋯ 2 2 ⋯ 2
-Après: ⋯ 2—0 2—0 0* 2—0 0* ⋯ 2—0* ⋯ 2 2 ⋯ 2
-         ^
+Démonstration. Nous procédons par induction sur i.
 
+Si i = 1, alors il faut considérer l'occurrence de 2 la plus à droite. Si elle est à la fin de la
+séquence, alors elle ne bougera plus jamais, ce qui la rend immédiatement d-progressive. Si elle
+est suivie d'un 0, alors l'occurrence de 2 est ou bien déjà d-progressif ou bien le sera à la passe
+suivante.
+
+Soit i > 1 et soit _j ∈ [1..i]_. Considérons la _j_-ème occurrence de 2 la plus à droite avant la passe _i_.
+Regardons où elle se déplace après la passe. Si tous les éléments à sa droite sont des 2, alors
+elle ne bouge pas et nous avons donc terminé. Supposons donc qu'il existe au moins une occurrence
+de 0 à sa droite. Par hypothèse d'induction, toutes les occurrences de 2 à sa droite sont
+d-progressive.
+
+Nous utilserons ces notations:
+
+* x* afin de dénoter le motif x répété zéro, une ou plusieurs fois;
+* xᙾ afin de dénoter le motif x répété un nombre pair de fois (incluant zéro fois);
+* ⌀ afin de dénoter un chiffre parmi 0 et 1.
+
+En insecptant les dispositions possibles, on remarque, qu'après la passe _i_, la _j_-ème occurrence
+devient en effet d-progressive:
+
+*Cas 1: l'occurrence est d'un côté gauche*
+```
+      j-ème occ.
          v
-Avant: ⋯ 2—0 0* 2—0 0* 2—0 0* ⋯ 2—0 0* ⋯ 2 2 ⋯ 2
-Après: ⋯ 0 2—0 0* 2—0 0* 2—0 0* ⋯ 2—0* ⋯ 2 2 ⋯ 2
+Avant: ⋯ 2↔⌀ (⌀ᙾ 2 ⌀)* ⌀* 2*
+Après: ⋯ ⌀ 2↔(⌀ᙾ ⌀ 2)* ⌀* 2*
            ^
+        j-ème occ.
+```
+*Cas 2: l'occurrence est au début ou d'un côté droit*
+```
+      j-ème occ.
+         v
+Avant: ⋯⇿2 (⌀ᙾ 2 ⌀)* ⌀* 2*
+Après: ⋯ 2↔(⌀ᙾ ⌀ 2)* ⌀* 2*
+         ^
+      j-ème occ.                                □
+```
 
 ```
-Proposition ?. Soit k la quantité de 2. Au début de la passe k+2, l'unique 1 est d-progressif.
+Proposition B. Soit k la quantité de 2. Au début de la passe k+2, l'unique 1 est d-progressif.
 ```
 
-Par la proposition ?, au début de la passe k+1, tous les 2 sont d-progressifs.
+Démonstration. Par la proposition A, au début de la passe k+1, tous les 2 sont d-progressifs.
+
+*Cas 1.A: l'occurrence est d'un côté gauche*
+```
+         v
+Avant: ⋯ 1↔0 (0ᙾ 2 0)* 0* 2*
+Après: ⋯ 0 1↔(0ᙾ 0 2)* 0* 2*
+           ^
+```
+*Cas 1.B: l'occurrence est d'un côté gauche*
+```
+         v
+Avant: ⋯ 1—2 2*
+Après: ⋯ 1—2 2*
+         ^
+```
+*Cas 2.A: l'occurrence est d'un côté droit*
+```
+           v
+Avant: ⋯ 0↔1 (0ᙾ 2 0)* 0* 2*
+Après: ⋯ 0 1↔(0ᙾ 0 2)* 0* 2*
+           ^
+```
+*Cas 2.B: l'occurrence est d'un côté droit*
+```
+           v
+Avant: ⋯ 2↔1 (0ᙾ 2 0)* 0* 2*
+Après: ⋯⇿1 2 (0ᙾ 0 2)* 0* 2*
+         ^
+                                                □
+```
+
+Contre-exemple: 1 n'est pas d-progressif au début de l'itér. 3:
+
+20 00 01 00 00 
+2 00 00 01 00 0
+20 00 00 01 00
+
+
+1 x--y ... Si x = 0, OK. Si x = 2, alors y = 2, OK.
+
+... 2--1  y--z...
+... 1  2--y--z...
 
 
 Soit j la position de l'une des i occurrences de 2 les plus à droite au début de la passe i.
