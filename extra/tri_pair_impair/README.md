@@ -4,28 +4,29 @@
 
 Dans le reste du billet, nous considérons que _s_ est une séquence d'entiers distincts.
 
-## Suivre le progrès d'un élément en particulier
+## Suivre le progrès d'un élément
 
 À titre d'exemple, considérons la séquence _s = [`10`, `40`, `30`, `50`, `20`]_ et l'élément _x = `30`_. Afin de suivre l'évolution de _x_, on peut
 substituer tous les éléments inférieurs à _x_ par `0`, tous les éléments supérieurs à _x_ par `2`, et _x_ par `1`. Appelons cette séquence _fₓ(s)_.
 Nous avons _fₓ(s) = [`0`, `2`, `1`, `2`, `0`]_. Regardons l'exécution de l'algorithme de tri sur ces deux entrées:
 
 ```
-Début passe 1:        10↔40 30↔50 20        0↔2 1↔2 0
-Début passe 2:        10 40↔30 50↔20        0 2↔1 2↔0
-Début passe 3:        10 30↔40 20↔50        0 1↔2 0↔2
-Début passe 4:        10↔30 40↔20 50        0↔1 2↔0 2
-Début passe 5:        10 30↔20 40↔50        0 1↔0 2↔2
-Début passe 6:        10↔20 30↔40 50        0↔0 1↔2 2
+                    séquence d'origine     séquence transformée
+
+Début passe 1:        10↔40 30↔50 20            0↔2 1↔2 0
+Début passe 2:        10 40↔30 50↔20            0 2↔1 2↔0
+Début passe 3:        10↔30 40↔20 50            0↔1 2↔0 2
+Début passe 4:        10 30↔20 40↔50            0 1↔0 2↔2
+Début passe 5:        10↔20 30↔40 50            0↔0 1↔2 2
 ```
 
-On observe que l'algorithme préserve la transformation _fₓ_ dans le sens où la position des éléments inférieurs, égaux et supérieurs à _x_ correspond
-toujours à des occurrences de `0`, `1` et `2`. Plus formellement, nous avons:
+On observe que l'algorithme préserve la transformation _fₓ_ dans le sens où la position d'un élément inférieur, égal ou supérieur à _x_ correspond
+toujours respectivement à une occurrences de `0`, `1` et `2`. Plus formellement:
 
 ***Proposition A.*** *Soit _s'_ la séquence obtenue après l'exécution de _k_ passes sur _s_, et soit _s''_ la séquence
 obtenue après l'exécution de _k_ passes sur _fₓ(s)_. Nous avons _fₓ(s') = s''_.*
 
-Ainsi, afin de suivre le progrès de _x_ dans _s_, il suffit de suivre le progrès de `1` dans _fₓ(s)_.
+Ainsi, afin de suivre le progrès de _x_ dans _s_, il suffit donc de suivre le progrès de `1` dans _fₓ(s)_.
 
 Un élément est _progressif_ si...
 
@@ -84,9 +85,7 @@ de cette forme:
 ```
 
 Après une autre passe, l'occurence de `1` est forcément progressive. Ainsi, en au plus _n - k - 1_ autres passes,
-la séquence devient triée.
-
-Au total, nous effectuons donc au plus _k + k + 1 + (n - k - 1) = n + k ≤ 2n_ passes. □
+la séquence devient triée. Au total, nous effectuons donc au plus _k + k + 1 + (n - k - 1) = n + k ≤ 2n_ passes. □
 
 ## Temps d'exécution de l'algorithme
 
@@ -99,10 +98,11 @@ Par hypothèse, _s''_ est triée. Ainsi la position de l'unique `1` dans _s''_ c
 tous les éléments à la droite de _x_ sont plus grands que lui, et tous les éléments à la droite de _x_ sont plus petits que lui.
 Il ne bougera donc plus jamais. □
 
-***Théorème.*** *L'algorithme trie s en au plus _2n_ passes.*
+***Théorème.*** *L'algorithme trie s en au plus _2n_ passes. Ainsi, l'algorithme fonctionne en temps O(n²) dans le pire cas.*
 
 *Démonstration.* Soit _x_ un élément de _s_. Par la proposition C, la séquence _fₓ(s)_ est triée en au plus _2n_ passes.
-Par la proposition D, cela signifie que, sur entrée _s_, l'algorithme fixe _x_ en au plus _2n_ passes. □
+Par la proposition D, cela signifie que, sur entrée _s_, l'algorithme fixe _x_ en au plus _2n_ passes. Comme chaque
+passe requiert un temps de _O(n)_, nous obtenons un temps de _O(n²)_. □
 
 ## Détails
 
