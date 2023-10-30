@@ -101,8 +101,10 @@ Il ne bougera donc plus jamais. □
 ***Théorème.*** *L'algorithme trie s en au plus _2n_ passes. Ainsi, l'algorithme fonctionne en temps O(n²) dans le pire cas.*
 
 *Démonstration.* Soit _x_ un élément de _s_. Par la proposition C, la séquence _fₓ(s)_ est triée en au plus _2n_ passes.
-Par la proposition D, cela signifie que, sur entrée _s_, l'algorithme fixe _x_ en au plus _2n_ passes. Comme chaque
-passe requiert un temps de _O(n)_, nous obtenons un temps de _O(n²)_. □
+Par la proposition D, cela signifie que, sur entrée _s_, l'algorithme fixe _x_ en au plus _2n_ passes. Ce raisonnement
+s'applique à chaque élément. Ainsi, après _2n_ passes, tous les éléments sont fixés.
+
+Comme chaque passe requiert un temps de _O(n)_, nous obtenons un temps total de _O(n²)_. □
 
 ## Détails
 
