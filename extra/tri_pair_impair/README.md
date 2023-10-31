@@ -39,7 +39,7 @@ Ainsi, afin de suivre le progrès de _x_ dans _s_, il suffit de suivre le progr�
 
 ## Progrès d'un élément
 
-Considérons une position _j_ au début de la passe _i_. Nous disons que _s[j]_ est _activement progressif_ si _s[j] > s[j+1]_ et que _s[j]_ se fait comparer avec _s[j+1]_:
+Considérons une position _j_ au début de la passe _i_. Nous disons que _s[j]_ est _activement progressif_ si _s[j] > s[j+1]_ et _s[j]_ se fait comparer avec _s[j+1]_:
 
 ```
 ⋯ s[j]↔s[j+1] ⋯
