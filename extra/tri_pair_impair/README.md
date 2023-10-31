@@ -12,7 +12,7 @@ passe paire:   s[1] s[2]↔s[3] s[4]↔s[5] ⋯
      ⋮                      ⋮
 ```
 
-Allons montrer que cet algorithme fonctionne en temps _O(n²)_ dans le pire cas.
+Nous allons montrer que cet algorithme fonctionne en temps _O(n²)_ dans le pire cas.
 
 ## Transformer la séquence afin de suivre un élément
 
