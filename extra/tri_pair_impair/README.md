@@ -1,14 +1,24 @@
-***En construction***
+# Tri impair-pair
 
-# Tri pair-impair
+L'_algorithme de tri impair-pair_ cherche à trier une séquence à l'aide de ce que nous
+appelerons des _passes_. Une passe compare des paires d'éléments adjacents et corrige les inversions détectées
+au besoin. L'algorithme alterne entre passes impaires et paires:
 
-Dans le reste du billet, nous considérons que _s_ est une séquence d'entiers distincts.
+```
+passe impaire: s[1]↔s[2] s[3]↔s[4] s[5]⇿⋯
+passe paire:   s[1] s[2]↔s[3] s[4]↔s[5] ⋯
+passe impaire: s[1]↔s[2] s[3]↔s[4] s[5]⇿⋯
+passe paire:   s[1] s[2]↔s[3] s[4]↔s[5] ⋯
+     ⋮                      ⋮
+```
 
-## Suivre le progrès d'un élément
+Allons montrer que cet algorithme fonctionne en temps _O(n²)_ dans le pire cas.
 
-À titre d'exemple, considérons la séquence _s = [`10`, `40`, `30`, `50`, `20`]_ et l'élément _x = `30`_. Afin de suivre l'évolution de _x_, on peut
-substituer tous les éléments inférieurs à _x_ par `0`, tous les éléments supérieurs à _x_ par `2`, et _x_ par `1`. Appelons cette séquence _fₓ(s)_.
-Nous avons _fₓ(s) = [`0`, `2`, `1`, `2`, `0`]_. Regardons l'exécution de l'algorithme de tri sur ces deux entrées:
+## Transformer la séquence afin de suivre un élément
+
+Considérons la séquence _s = [`10`, `40`, `30`, `50`, `20`]_ et l'élément _x = `30`_. Afin de suivre l'évolution de _x_, on peut substituer
+tous les éléments inférieurs à _x_ par `0`, tous les éléments supérieurs à _x_ par `2`, et _x_ par `1`. Appelons cette séquence
+_fₓ(s)_. Nous avons _fₓ(s) = [`0`, `2`, `1`, `2`, `0`]_. Regardons l'exécution de l'algorithme sur ces deux entrées:
 
 ```
                     séquence d'origine     séquence transformée
@@ -19,18 +29,97 @@ Début passe 3:        10↔30 40↔20 50            0↔1 2↔0 2
 Début passe 4:        10 30↔20 40↔50            0 1↔0 2↔2
 Début passe 5:        10↔20 30↔40 50            0↔0 1↔2 2
 ```
-
 On observe que l'algorithme préserve la transformation _fₓ_ dans le sens où la position d'un élément inférieur, égal ou supérieur à _x_ correspond
 toujours respectivement à une occurrences de `0`, `1` et `2`. Plus formellement:
 
 ***Proposition A.*** *Soit _s'_ la séquence obtenue après l'exécution de _k_ passes sur _s_, et soit _s''_ la séquence
 obtenue après l'exécution de _k_ passes sur _fₓ(s)_. Nous avons _fₓ(s') = s''_.*
 
-Ainsi, afin de suivre le progrès de _x_ dans _s_, il suffit donc de suivre le progrès de `1` dans _fₓ(s)_.
+Ainsi, afin de suivre le progrès de _x_ dans _s_, il suffit de suivre le progrès de l'élément `1` dans _fₓ(s)_.
 
-Un élément est _progressif_ si...
+## Progrès d'un élément
 
-***Proposition B.*** *Sur entrée _fₓ(s)_, au début de la passe _i+1_, les _i_ occurrences de `2` les plus à droite sont progressives.*
+Considérons une position _j_ au début de la passe _i_. Nous disons que _s[j]_ est _activement progressif_ si _s[j] > s[j+1]_ et que _s[j]_ se fait comparer avec _s[j+1]_:
+
+```
+⋯ s[j]↔s[j+1] ⋯
+```
+
+Nous disons que _s[j]_ est _passivement progressif_ si tous les éléments à sa droite sont supérieurs ou égaux.
+Nous disons que _s[j]_ est _progressif_ s'il est activement ou passivement progressif.
+
+Par exemple, considérons la séquence _s = [`0`, `1`, `0`, `2`, `2`, `2`, `0`, `0`, `0`]_ et le statut de chaque occurrence de `2`:
+
+```
+Début passe 1:        0↔1 0↔2 2↔2 0↔0 0       Légende:  ▲ =  activement progressif
+                                                        △ = passivement progressif
+
+Début passe 2:        0 1↔0 2↔2 2↔0 0↔0
+                                ▲
+
+Début passe 3:        0↔0 1↔2 2↔0 2↔0 0
+                              ▲   ▲
+
+Début passe 4:        0 0↔1 2↔0 2↔0 2↔0
+                            ▲   ▲   ▲
+
+Début passe 5:        0↔0 1↔0 2↔0 2↔0 2
+                              ▲   ▲   △
+
+Début passe 6:        0 0↔0 1↔0 2↔0 2↔2
+                                ▲   △ △
+
+Début passe 7:        0↔0 0↔0 1↔0 2↔2 2
+                                  △ △ △
+```
+
+On remarque qu'après une passe, le `2` le plus à droite est progressif, puis à la passe suivante, le deuxième `2` le plus à droite est progressif, puis à
+la passe suivante, le troisième `2` le plus à droite est progressif. De plus, dès qu'un `2` est activement progressif, il progresse systématiquement jusqu'à
+devenir passivement progressif à tout jamais. Formellement:
+
+***Proposition B.*** *Soit _s_ une séquence d'éléments distincts et _x_ un élément de _s_. Sur entrée _fₓ(s)_, au début de la passe _i+1_, les _i_ occurrences de `2` les plus à droite sont progressives.*
+
+Cette observation permet de borner le nombre de passes nécessaire afin de bien positionner tous les `2`. Lorsque cela
+se produit, après au plus une passe, l'unique `1` est forcément progressif et se dirige vers sa bonne position. Formellement:
+
+***Proposition C.*** *Soit _s_ une séquence d'éléments distincts et _x_ un élément de _s_. La séquence _fₓ(s)_ est triée en au plus _2n_ passes.*
+
+*Démonstration.* Soit _k_ la quantité de `2`. Par la proposition B, au début de la passe _k+1_, tous les `2` sont
+progressifs. Ainsi, en au plus _k_ autres passes, tous les `2` sont bien positionnés, et ainsi la séquence devient
+de cette forme:
+
+```
+ 0* 1 0* 2 ⋯ 2       où «0*» signifie «une suite de zéro, un ou plusieurs 0»
+         ^^^^^
+         k fois
+```
+
+Après une autre passe, l'occurence de `1` est forcément progressive. Ainsi, en au plus _n - k - 1_ autres passes,
+la séquence devient triée. Au total, nous effectuons donc au plus _k + k + 1 + (n - k - 1) = n + k ≤ 2n_ passes. □
+
+## Temps d'exécution de l'algorithme
+
+Nous disons qu'un élément est _fixé_ si tous les éléments à sa droite lui sont supérieurs ou égaux, et tous ceux à sa gauche lui sont
+inférieurs ou égaux. Lorsqu'un élément est fixé, une passe ne peut plus le déplacer.
+
+***Proposition D.*** *Soit _s_ une séquence d'éléments distincts et soit _x_ un élément de _s_. Si l'algorithme, sur entrée _fₓ(s)_, termine en _k_ passes, alors l'algorithme,
+sur entrée _s_, fixe l'élément _x_ en _k_ passes.*
+
+Démonstration. Imaginons que l'on exécute l'algorithme sur entrée _s_ d'une part, et sur entrée _fₓ(s)_ d'autre part. Appelons  _s'_
+et _s''_ les séquences obtenues après _k_ passes des deux exécutions respectives. Par la proposition A, nous avons _fₓ(s') = s''_.
+Par hypothèse, _s''_ est triée. Ainsi la position de l'unique `1` dans _s''_ correspond à la position de _x_ dans _s'_. Par conséquent,
+tous les éléments à la droite de _x_ sont plus grands que lui, et tous les éléments à la gauche de _x_ sont plus petits que lui.
+Il ne bougera donc plus jamais. □
+
+***Théorème.*** *Soit _s_ une séquence d'éléments distincts. L'algorithme trie _s_ en au plus _2n_ passes. Ainsi, l'algorithme fonctionne en temps O(n²) dans le pire cas.*
+
+*Démonstration.* Soit _x_ un élément de _s_. Par la proposition C, la séquence _fₓ(s)_ est triée en au plus _2n_ passes.
+Par la proposition D, cela signifie que, sur entrée _s_, l'algorithme fixe _x_ en au plus _2n_ passes. Ce raisonnement
+s'applique à chaque élément. Ainsi, après _2n_ passes, tous les éléments sont fixés. Comme chaque passe requiert un temps de _O(n)_, nous obtenons un temps total de _O(n²)_. □
+
+## ★ Preuve de la proposition B
+
+***Proposition B.*** *Soit _s_ une séquence d'éléments distincts et _x_ un élément de _s_. Sur entrée _fₓ(s)_, au début de la passe _i+1_, les _i_ occurrences de `2` les plus à droite sont progressives.*
 
 *Démonstration.* Nous procédons par induction sur _i_.
 
@@ -71,55 +160,3 @@ Après: ⋯ 2↔(⌀ᙾ ⌀ 2)* ⌀* 2*
          ^
       j-ème occ.                                □
 ```
-
-***Proposition C.*** *La séquence _fₓ(s)_ est triée en au plus _2n_ passes.*
-
-*Démonstration.* Soit _k_ la quantité de `2`. Par la proposition B, au début de la passe _k+1_, tous les `2` sont
-progressifs. Ainsi, en au plus _k_ autres passes, tous les `2` sont bien positionnés, et ainsi la séquence devient
-de cette forme:
-
-```
- 0* 1 0* 2 ⋯ 2.
-         ^^^^^
-         k fois
-```
-
-Après une autre passe, l'occurence de `1` est forcément progressive. Ainsi, en au plus _n - k - 1_ autres passes,
-la séquence devient triée. Au total, nous effectuons donc au plus _k + k + 1 + (n - k - 1) = n + k ≤ 2n_ passes. □
-
-## Temps d'exécution de l'algorithme
-
-***Proposition D.*** *Soit _x_ un élément de _s_. Si l'algorithme, sur entrée _fₓ(s)_, termine en _k_ passes, alors l'algorithme,
-sur entrée _s_, fixe l'élément _x_ en _k_ passes.*
-
-Démonstration. Imaginons que l'on exécute l'algorithme sur entrée __s d'une part, et sur entrée _fₓ(s)_ d'autre part. Appelons  _s'_
-et _s''_ les séquences obtenues après _k_ passes des deux exécutions respectives. Par la proposition A, nous avons _fₓ(s') = s''_.
-Par hypothèse, _s''_ est triée. Ainsi la position de l'unique `1` dans _s''_ correspond à la position de _x_ dans _s'_. Par conséquent,
-tous les éléments à la droite de _x_ sont plus grands que lui, et tous les éléments à la droite de _x_ sont plus petits que lui.
-Il ne bougera donc plus jamais. □
-
-***Théorème.*** *L'algorithme trie s en au plus _2n_ passes. Ainsi, l'algorithme fonctionne en temps O(n²) dans le pire cas.*
-
-*Démonstration.* Soit _x_ un élément de _s_. Par la proposition C, la séquence _fₓ(s)_ est triée en au plus _2n_ passes.
-Par la proposition D, cela signifie que, sur entrée _s_, l'algorithme fixe _x_ en au plus _2n_ passes. Ce raisonnement
-s'applique à chaque élément. Ainsi, après _2n_ passes, tous les éléments sont fixés.
-
-Comme chaque passe requiert un temps de _O(n)_, nous obtenons un temps total de _O(n²)_. □
-
-## Détails
-
-***Lemme A.*** *Si _a ≤ b_, alors _fₓ(a) ≤ fₓ(b)_.*
-
-*Démonstration.* Nous prouvons la proposition en considérant tous les cas.
-
-* Cas _a < x_ et _b < x_. Nous avons _fₓ(a) = 0 = fₓ(b)_.
-* Cas _a < x_ et _b = x_. Nous avons _fₓ(a) = 0 ≤ 1 = fₓ(b)_.
-* Cas _a = x_ et _b = x_. Nous avons _fₓ(a) = 1 = fₓ(b)_.
-* Cas _a = x_ et _b > x_. Nous avons _fₓ(a) = 1 ≤ 2 = fₓ(b)_.
-* Cas _a > x_ et _b > x_. Nous avons _fₓ(a) = 2 = fₓ(b)_. □
-  
-***Lemme B.*** *Soient _x_ un élément et _i_ une position de _s_. Soit _s'_ la séquence obtenue en corrigeant _(i, i+1)_ au besoin dans _s_.
-Soit _s''_ la séquence obtenue en corrigeant _(i, i+1)_ au besoin dans _fₓ(s)_. Nous avons _s'' = fₓ(s')_.*
-
-
-
