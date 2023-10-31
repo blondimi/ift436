@@ -1,7 +1,7 @@
 # Tri impair-pair
 
 L'_algorithme de tri impair-pair_ cherche à trier une séquence à l'aide de ce que nous
-appelerons des _passes_. Une passe compare des paires d'éléments adjacents et corrige les inversions détectées
+appellerons des _passes_. Une passe compare des paires d'éléments adjacents et corrige les inversions détectées
 au besoin. L'algorithme alterne entre passes impaires et paires:
 
 ```
