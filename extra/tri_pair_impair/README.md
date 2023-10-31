@@ -89,7 +89,7 @@ progressifs. Ainsi, en au plus _k_ autres passes, tous les `2` sont bien positio
 de cette forme:
 
 ```
- 0* 1 0* 2 ⋯ 2       où «0*» signifie «une suite de zéro, un ou plusieurs 0»
+ 0* 1 0* 2 ⋯ 2       («0*» signifie «une suite de zéro, un ou plusieurs 0»)
          ^^^^^
          k fois
 ```
