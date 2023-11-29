@@ -158,7 +158,7 @@ sous-séquence ```p[i : j]```. On remplit ce tableau ligne à ligne à partir du
 de gauche à droite:
 
 ```
-coupes(p, T):
+coupes_iter(p, T):
   M ← [(i, j) ↦ ⊥ : i, j ∈ [1..|p|]]
 
   pour i ∈ [1..|p|]:
