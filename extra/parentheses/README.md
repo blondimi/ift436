@@ -149,10 +149,9 @@ cas de base (```|p| = 1```) est atteint:
 
 Ici, l'axe y est aussi logarithmique, donc l'écart est abyssal!
 
+# Parenthésage: approche itérative
 
-## Approche ascendante
-
-L'approche par coupe avec mémoïsation s'implémente également de façon itérative. On remplit
+L'approche par coupe avec mémoïsation s'implémente également de façon ascendante. On remplit
 un tableau ```M``` où ```M[i, j]``` indique les éléments qu'on peut obtenir en parenthésant la
 sous-séquence ```p[i : j]```. On remplit ce tableau ligne à ligne à partir du bas, et colonne à colonne
 de gauche à droite:
