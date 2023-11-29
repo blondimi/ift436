@@ -194,6 +194,6 @@ On obtient ainsi ```M[1, 4] = {🔸 ⊗ 🔹, 📙 ⊗ 📘, 🧡 ⊗ 💙} = {c
 |**3**|⊥|⊥|{c}|{x}<sup>📘</sup>
 |**4**|⊥|⊥|⊥|{a}<sup>💙</sup>
 
-Remarquons que cette approche fonctionne en ϴ(n³) dans le pire _et_ meilleur cas, alors
-que l'implémentation récursive qui elle est de ϴ(n³) dans le pire cas et de ϴ(n²) dans le
+Remarquons que cette approche fonctionne en temps ϴ(n³) dans le pire _et_ meilleur cas, alors
+que l'implémentation récursive fonctionne en temps ϴ(n³) dans le pire cas et ϴ(n²) dans le
 meilleur cas.
