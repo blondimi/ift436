@@ -159,13 +159,13 @@ de gauche à droite:
 
 ```
 coupes(p, T):
-  M ← [(i, j) ↦ ⊥ : i, j ∈ [1..|s|]]
+  M ← [(i, j) ↦ ⊥ : i, j ∈ [1..|p|]]
 
-  pour i ∈ [1..|s|]:
+  pour i ∈ [1..|p|]:
     M[i, i] ← {p[i]}
 
-  pour i ∈ [|s|..1]:
-      pour j ∈ [i+1..|s|]:
+  pour i ∈ [|p|..1]:
+      pour j ∈ [i+1..|p|]:
           M[i, j] ← ∅
 
           pour k ∈ [i..j-1]:
