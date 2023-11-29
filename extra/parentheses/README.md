@@ -81,7 +81,7 @@ Considérons la séquence ```a```<sup>*n*</sup>, c'est-à-dire celle constituée
 peut engendrer ```a``` ou ```b```. Cela signifie qu'à travers des contractions sur ```a```<sup>*n*</sup>, on
 peut engendrer 2<sup>n/3</sup> séquences distinctes de taille n/3, ce qui est exponentiel.
 
-## Approche par coupes
+## Approche par coupes et mémoïsation
 
 On peut plutôt procéder par «coupes» successives:
 
