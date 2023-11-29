@@ -193,3 +193,6 @@ On obtient ainsi ```M[1, 4] = {🔸 ⊗ 🔹, 📙 ⊗ 📘, 🧡 ⊗ 💙} = {c
 |**2**|⊥|{b}|{a}|{a}<sup>🔹</sup>
 |**3**|⊥|⊥|{c}|{x}<sup>📘</sup>
 |**4**|⊥|⊥|⊥|{a}<sup>💙</sup>
+
+Remarquons que cette approche fonctionne en ϴ(n³) dans le pire _et_ meilleur cas, alors
+que l'implémentation récursive est plus rapide dans le meilleur cas.
