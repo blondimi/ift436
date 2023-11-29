@@ -186,7 +186,7 @@ Considérons la séquence ```p = cbca``` et cette table de multiplication ```T``
 L'algorithme mène au tableau ```M``` ci-dessous. En particulier, la case
 ```M[1, 4]``` est obtenue grâce aux paires de cases marquées par des symboles.
 On obtient ainsi ```M[1, 4] = {🟥 ⊗ 🟦, 🔴 ⊗ 🔵, ❤️ ⊗ 💙} = {c ⊗ a, a ⊗ x, x ⊗ a}
-= {x, x, a} = {a, x}```.
+= {x, a, a} = {a, x}```.
 
 | |1|2|3|4|
 |-|-|-|-|-|
