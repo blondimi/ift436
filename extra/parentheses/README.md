@@ -81,7 +81,7 @@ Considérons la séquence ```a```<sup>*n*</sup>, c'est-à-dire celle constituée
 peut engendrer ```a``` ou ```b```. Cela signifie qu'à travers des contractions sur ```a```<sup>*n*</sup>, on
 peut engendrer 2<sup>n/3</sup> séquences distinctes de taille n/3, ce qui est exponentiel.
 
-## Approche par coupes et mémoïsation
+## Approche par coupes avec mémoïsation
 
 On peut plutôt procéder par «coupes» successives:
 
@@ -151,7 +151,7 @@ Ici, l'axe y est aussi logarithmique, donc l'écart est abyssal!
 
 # Parenthésage: approche itérative
 
-L'approche par coupe avec mémoïsation s'implémente également de façon ascendante. On remplit
+L'approche par coupes avec mémoïsation s'implémente également de façon ascendante. On remplit
 un tableau ```M``` où ```M[i, j]``` indique les éléments qu'on peut obtenir en parenthésant la
 sous-séquence ```p[i : j]```. On remplit ce tableau ligne à ligne à partir du bas, et colonne à colonne
 de gauche à droite:
