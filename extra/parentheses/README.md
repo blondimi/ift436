@@ -148,3 +148,48 @@ cas de base (```|p| = 1```) est atteint:
 ![Comparaison 3](img/img3.png)
 
 Ici, l'axe y est aussi logarithmique, donc l'écart est abyssal!
+
+
+## Approche ascendante
+
+L'approche par coupe avec mémoïsation s'implémente également de façon itérative. On remplit
+un tableau ```M``` où ```M[i, j]``` indique les éléments qu'on peut obtenir en parenthésant la
+sous-séquence ```p[i : j]```. On remplit ce tableau ligne à ligne à partir du bas, et colonne à colonne
+de gauche à droite:
+
+```
+coupes(p, T):
+  M ← [(i, j) ↦ ⊥ : i, j ∈ [1..|s|]]
+
+  pour i ∈ [1..|s|]:
+    M[i, i] ← {p[i]}
+
+  pour i ∈ [|s|..1]:
+      pour j ∈ [i+1..|s|]:
+          M[i, j] ← ∅
+
+          pour k ∈ [i..j-1]:
+              M[i, j] ← M[i, j] ∪ {T[x, y] : x ∈ M[i, k], y ∈ M[k + 1, j]}
+
+  retourner x ∈ M[1, n]
+```
+
+Considérons la séquence ```p = cbca``` et cette table de multiplication ```T```:
+
+|⊗|a|b|c|x|
+|-|-|-|-|-|
+|**a**|a|b|x|a
+|**b**|b|b|a|a
+|**c**|x|a|b|c
+|**x**|a|a|c|b
+
+L'algorithme mène au tableau ```M``` ci-dessous. En particulier, la case
+```M[1, 4]``` est obtenue grâce aux paires de cases marquées par des symboles.
+On obtient ainsi ```M[1, 4] = {c ⊗ a, a ⊗ x, x ⊗ a} = {x, x, a} = {a, x}```.
+
+| |1|2|3|4|
+|-|-|-|-|-|
+|**1**|{c}<sup>💜</sup>|{a}<sup>🔴|{x}<sup>🔶</sup>|{a, x}
+|**2**|⊥|{b}|{a}|{a}<sup>💜</sup>
+|**3**|⊥|⊥|{c}|{x}<sup>🔴</sup>
+|**4**|⊥|⊥|⊥|{a}<sup>🔶</sup>
