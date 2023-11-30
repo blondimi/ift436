@@ -221,50 +221,57 @@ coupes_sansmem(p, T):
   retourner x ∈ coupes_sansmem'(p)
 ```
 
-Analysons _f(n)_ définie comme étant le nombre d'appels récursifs effectués par l'appel initial ```coupes_sansmem'(p)```
-où _n_ est la taille de la séquence ```p```. Nous avons _f(1) = 0_ car aucun appel n'est effectué au cas de base.
+Analysons _f(n)_ définie comme étant le nombre d'appels récursifs effectués par l'appel initial ```coupes_sansmem'(p)```,
+où _n_ est la taille de ```p```. Nous avons _f(1) = 0_ car aucun appel n'est effectué au cas de base.
 En inspectant la boucle du cas général, on remarque que:
 
 ```
-f(n) = (2 + f(1) + f(n-1)) + (2 + f(2) + f(n-2)) + ... + (2 + f(n-1) + f(1)),
+f(n) = (2 + f(1) + f(n-1)) + (2 + f(2) + f(n-2)) + … + (2 + f(n-1) + f(1)),
 ```
 
 que nous pouvons réécrire comme suit:
 
 ```
-f(n) = 2·(n-1) + 2·(f(1) + f(2) + ... + f(n-1)).
+f(n) = 2·(n-1) + 2·(f(1) + f(2) + … + f(n-1)).
 ```
 
-Nous cherchons donc à trouver une forme close à une récurrence. Toutefois, celle-ci n'est pas d'une forme couverte dans les notes
-de cours. Tentons de trouver la forme close. Remarquons que pour _n ≥ 3_, nous avons:
+Nous cherchons donc à trouver une forme close à une récurrence. Toutefois, celle-ci n'est pas directement dans
+une forme couverte en classe. Remarquons que pour tout _n ≥ 3_, nous avons:
 
 ```
-f(n) =  2·(n-1) + 2·(f(1) + f(2) + ... + f(n-1))                      [par déf. de f(n)]
-     = [2·(n-2) + 2·(f(1) + f(2) + ... + f(n-2))] + [2 + 2·f(n-1)]    [en réécrivant la somme]
-     = f(n-1) + [2 + 2·f(n-1)]                                        [par déf. de f(n-1)]
+f(n) =  2·(n-1) + 2·(f(1) + f(2) + … + f(n-1))                      [par déf. de f(n)]
+     = [2·(n-2) + 2·(f(1) + f(2) + … + f(n-2))] + [2 + 2·f(n-1)]    [en réécrivant la somme]
+     = f(n-1) + [2 + 2·f(n-1)]                                      [par déf. de f(n-1)]
      = 3·f(n-1) + 2.
 ```
 
-Ainsi, informellement, _f(n)_ triple chaque fois qu'on décrémente _n_. Calculons quelques valeurs de _f(n)_ et de _3<sup>n</sup>_:
-
-|n|1|2|3|4|5|6|7|8|
-|-|-:|-:|-:|-:|-:|-:|-:|-:|
-|**f(n)**|0|2|8|26|80|242|728|2186
-|**3<sup>n</sup>**|3|9|27|81|243|729|2187|6561
-
-Ces valeurs suggèrent que _f(n) = 3<sup>n-1</sup> - 1_. Démontrons cette conjecture par induction.
-
-* Si _n = 1_, alors nous avons bien _f(1) = 0 = 1 - 1 = 3<sup>0</sup> - 1_.
-* Si _n = 2_, alors nous avons bien _f(2) = 2 = 3 - 1 = 3<sup>1</sup> - 1_.
-* Soit _n ≥ 3_. Supposons l'affirmation vraie pour _n - 1_. Nous avons:
+Ainsi, nous avons une récurrence linéaire non homogène:
 
 ```
-f(n) = 3·f(n-1) + 2         [par l'observation faite précédemment]
-     = 3·(3ⁿ⁻² - 1) + 2     [par hypothèse d'induction]
-     = 3ⁿ⁻¹ - 3 + 2
-     = 3ⁿ⁻¹ - 1.            □
+f(n) = 0             si n = 1,
+       2             si n = 2,
+       3·f(n-1) + 2  sinon.
 ```
+
+Nous pouvons maintenant trouver une forme close à _f_. Son polynôme caractéristique est _x - 3_. De plus, comme la
+récurrence est non homogène, il faut lui multiplier _x - 1_. Nous obtenons donc le polynôme _(x - 3)(x - 1)_ dont
+les racines sont _3_ et _1_. La forme close de _f_ est ainsi de la forme _c₁·3<sup>n</sup> + c₂_. Afin d'identifier
+les constantes, nous pouvons considérer ce système d'équations:
+
+```
+c₁·3¹ + c₂ = 0
+c₁·3² + c₂ = 2
+```
+
+qui se réécrit
+
+```
+3·c₁ + c₂ = 0
+9·c₁ + c₂ = 2
+```
+
+Nous avons donc _c₁ = 1/3_ et _c₂ = -1_, ce qui mène à _f(n) = ⅓·3<sup>n</sup> - 1 = 3<sup>n-1</sup> - 1_.
 
 Par conséquent, nous avons _f ∈ Θ(3ⁿ)_. Rappelons que _f_ dénote le nombre d'appels
-récursif. Chaque appel récursif, qui mène dans le corps du ```sinon```, effectue localement _Θ(n)_ opérations élémentaires.
+récursifs. Chaque appel récursif, qui mène dans le corps du ```sinon```, effectue localement _Θ(n)_ opérations élémentaires.
 Ainsi, le temps d'exécution de l'algorithme appartient à _Θ(3ⁿ·n)_.
