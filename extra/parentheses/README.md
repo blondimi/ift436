@@ -104,7 +104,7 @@ coupes(p, T):
       sinon:
         valeurs ← ∅
 
-        pour i ∈ [2..|s|-1]
+        pour i ∈ [2..|s|]
           gauche  ← coupes'(s[1 : i-1])
           droite  ← coupes'(s[i : |s|])
           valeurs ← valeurs ∪ {T[x, y] : x ∈ gauche, y ∈ droite}
@@ -194,6 +194,77 @@ On obtient ainsi ```M[1, 4] = {🔸 ⊗ 🔹, 📙 ⊗ 📘, 🧡 ⊗ 💙} = {c
 |**3**|⊥|⊥|{c}|{x}<sup>📘</sup>
 |**4**|⊥|⊥|⊥|{a}<sup>💙</sup>
 
-Remarquons que cette approche fonctionne en temps ϴ(n³) dans le pire _et_ meilleur cas, alors
-que l'implémentation récursive fonctionne en temps ϴ(n³) dans le pire cas et ϴ(n²) dans le
+Remarquons que cette approche, implémentée de cette façon, fonctionne en temps Θ(n³) dans le pire _et_ meilleur cas, alors
+que l'implémentation récursive fonctionne en temps Θ(n³) dans le pire cas et Θ(n²) dans le
 meilleur cas.
+
+# Analyse d'une approche récursive sans mémoïsation
+
+En classe (A23), une personne m'a demandé comment analyser l'approche récursive avec coupe
+_sans_ mémoïsation. Faisons cette analyse. Tout d'abord, voici le pseudocode à considérer:
+
+```
+coupes_sansmem(p, T):
+  coupes_sansmem'(s):
+    si |s| = 1:
+      retourner {s[1]}                                                                                                
+    sinon:
+      valeurs ← ∅
+
+      pour i ∈ [2..|s|]
+        gauche  ← coupes'(s[1 : i-1])
+        droite  ← coupes'(s[i : |s|])
+        valeurs ← valeurs ∪ {T[x, y] : x ∈ gauche, y ∈ droite}
+
+      retourner valeurs
+
+  retourner x ∈ coupes_sansmem'(p)
+```
+
+Analysons _f(n)_ définie comme étant le nombre d'appels récursifs effectués par l'appel initial ```coupes_sansmem'(p)```
+où _n_ est la taille de la séquence ```p```. Nous avons _f(1) = 0_ car aucun appel n'est effectué au cas de base.
+En inspectant la boucle du cas général, on remarque que:
+
+```
+f(n) = (2 + f(1) + f(n-1)) + (2 + f(2) + f(n-2)) + ... + (2 + f(n-1) + f(1)),
+```
+
+que nous pouvons réécrire comme suit:
+
+```
+f(n) = 2·(n-1) + 2·(f(1) + f(2) + ... + f(n-1)).
+```
+
+Nous cherchons donc à trouver une forme close à une récurrence. Toutefois, celle-ci n'est pas d'une forme couverte dans les notes
+de cours. Tentons de trouver la forme close. Remarquons que pour _n ≥ 3_, nous avons:
+
+```
+f(n) =  2·(n-1) + 2·(f(1) + f(2) + ... + f(n-1))                      [par déf. de f(n)]
+     = [2·(n-2) + 2·(f(1) + f(2) + ... + f(n-2))] + [2 + 2·f(n-1)]    [en réécrivant la somme]
+     = f(n-1) + [2 + 2·f(n-1)]                                        [par déf. de f(n-1)]
+     = 3·f(n-1) + 2.
+```
+
+Ainsi, informellement, _f(n)_ triple chaque fois qu'on décrémente _n_. Calculons quelques valeurs de _f(n)_ et de _3<sup>n</sup>_:
+
+|n|1|2|3|4|5|6|7|8|
+|-|-:|-:|-:|-:|-:|-:|-:|-:|
+|**f(n)**|0|2|8|26|80|242|728|2186
+|**3<sup>n</sup>**|3|9|27|81|243|729|2187|6561
+
+Ces valeurs suggèrent que _f(n) = 3<sup>n-1</sup> - 1_. Démontrons cette conjecture par induction.
+
+* Si _n = 1_, alors nous avons bien _f(1) = 0 = 1 - 1 = 3<sup>0</sup> - 1_.
+* Si _n = 2_, alors nous avons bien _f(2) = 2 = 3 - 1 = 3<sup>1</sup> - 1_.
+* Soit _n ≥ 3_. Supposons l'affirmation vraie pour _n - 1_. Nous avons:
+
+```
+f(n) = 3·f(n-1) + 2         [par l'observation faite précédemment]
+     = 3·(3ⁿ⁻² - 1) + 2     [par hypothèse d'induction]
+     = 3ⁿ⁻¹ - 3 + 2
+     = 3ⁿ⁻¹ - 1.            □
+```
+
+Par conséquent, nous avons _f ∈ Θ(3ⁿ)_. Rappelons que _f_ dénote le nombre d'appels
+récursif. Chaque appel récursif, qui mène dans le corps du ```sinon```, effectue localement _Θ(n)_ opérations élémentaires.
+Ainsi, le temps d'exécution de l'algorithme appartient à _Θ(3ⁿ·n)_.
