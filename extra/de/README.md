@@ -22,7 +22,7 @@ de probabilités (mieux connu sous le nom savant de _[chaîne de Markov à temps
 discret](https://fr.wikipedia.org/wiki/Cha%C3%AEne_de_Markov)_):
 
 ```                                  
-  ┌─────────────────→ (???) ←─────────────────┐
+  ┌─────────────────▸ (???) ◂─────────────────┐
   │             ½ ↙           ↘ ½             │
  ½│        (??0)                 (??1)        │½
   │     ½ ↙     ↘ ½           ½ ↙     ↘ ½     │
@@ -39,7 +39,7 @@ discret](https://fr.wikipedia.org/wiki/Cha%C3%AEne_de_Markov)_):
 
 Ici, chaque sommet de la forme ```(abc)``` indique que le bit _a_ a été
 assigné à la variable _y₂_, que le bit _b_ a été assigné à la
-variable _y₁_, et , que le bit _c_ a été assigné à la variable _y₂_,
+variable _y₁_, et , que le bit _c_ a été assigné à la variable _y₀_,
 où ```?``` signifie que rien n'a été assigné.
 
 ### Cycles
@@ -47,7 +47,7 @@ où ```?``` signifie que rien n'a été assigné.
 Voici une analyse qui fonctionne. Cherchons à identifier la
 probabilité de débuter dans le sommet ```???``` et d'atteindre le
 sommet ```100``` qui correspond au verdict ```4```. Il est possible
-d'utiliser les cycles simples ```??? → ??0 → ?00 → ????``` et
+d'utiliser les cycles simples ```??? → ??0 → ?00 → ???``` et
 ```??? → ??1 → ?11 → ???``` un certain nombre de fois. Appelons ces deux
 cycles ```g``` et ```d```. Il y a plusieurs façons de combiner ces cycles, par
 ex. ```gddg``` indique qu'on tourne d'abord à gauche, puis deux fois à
@@ -79,7 +79,7 @@ Pour atteindre le sommet ```100``` à partir du sommet ```???```, on doit:
   _k_);
 * suivre les trois arêtes vers le bas et la gauche: ```??? → ??0 → ?00 → 100```.
 
-La probabilité d'obtenir ```4``` est donc de _1/6_ comme attendu:
+La probabilité d'obtenir ```4``` est donc de:
 
 ```
      ∞     n
@@ -94,17 +94,19 @@ La probabilité d'obtenir ```4``` est donc de _1/6_ comme attendu:
 
              ∞  
             \¯¯ 
-= (1/8) ·   /__   (1/8 + 1/8)ⁿ      [par la formule du binôme de Newton avec x = 1/9 et y = 4/9]
+= (1/8) ·   /__   (1/8 + 1/8)ⁿ    [par la formule du binôme de Newton avec x = 1/8 et y = 1/8]
            n = 0
 
                1  
-= (1/8) ·  ---------                [car série géométrique de raison 2/8]
+= (1/8) ·  ---------              [car série géométrique de raison 2/8]
            (1 - 2/8)
 
 = (1/8) · (4/3)
 
 = 1/6.
 ```
+
+Le raisonnement pour les cinq autres valeurs est similaire. Dans tous les cas, on obtient _1/6_ comme attendu.
 
 ### Liens
 
