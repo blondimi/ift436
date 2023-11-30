@@ -29,12 +29,6 @@ discret](https://fr.wikipedia.org/wiki/Cha%C3%AEne_de_Markov)_):
   └───(?00)     (?10)       (?01)     (?11)───┘
        ½↓      ½ ↙ ↘ ½     ½ ↙ ↘ ½      ↓½
       (100)  (010) (110) (001) (101)  (011)
- 
-                2/3           1/3          2/3          1/3
- "pile" (01) <------- (0?) <------- (??) ------> (1?) -------> (10) "face"
-                       |            ^  ^           |
-                       ------------/    \-----------
-                            1/3             2/3
 ```
 
 Ici, chaque sommet de la forme ```(abc)``` indique que le bit _a_ a été
