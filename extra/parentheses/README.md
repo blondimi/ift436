@@ -16,7 +16,7 @@ contractions(p, T):
     retourner (p[1] = x)
   sinon:
     pour i ∈ [1..|p|-1]:
-      gauche ← s[1 : i-1]
+      gauche ← p[1 : i-1]
       centre ← T[p[i], p[i+1]]
       droite ← p[i+2 : |p|]
 
