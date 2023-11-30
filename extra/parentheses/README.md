@@ -20,7 +20,7 @@ contractions(p, T):
       centre ← T[p[i], p[i+1]]
       droite ← p[i+2 : |p|]
 
-      si contractions(gauche + centre + droite):
+      si contractions(gauche + centre + droite, T):
         retourner vrai
 
     retourner faux
@@ -198,7 +198,7 @@ Remarquons que cette approche, implémentée de cette façon, fonctionne en temp
 que l'implémentation récursive fonctionne en temps Θ(n³) dans le pire cas et Θ(n²) dans le
 meilleur cas.
 
-# Analyse d'une approche récursive sans mémoïsation
+# ★ Analyse de l'approche avec coupes sans mémoïsation
 
 En classe (A23), une personne m'a demandé comment analyser l'approche récursive avec coupe
 _sans_ mémoïsation. Faisons cette analyse. Tout d'abord, voici le pseudocode à considérer:
@@ -273,3 +273,43 @@ qui se réécrit
 Nous avons donc _c₁ = 1/3_ et _c₂ = -1_, ce qui mène à _f(n) = ⅓·3<sup>n</sup> - 1 = 3<sup>n-1</sup> - 1_.
 
 Par conséquent, nous avons _f ∈ Θ(3ⁿ)_, ce qui n'est pas polynomial.
+
+# ⭐⭐ Analyse de l'approche par contractions sans mémoïsation
+
+Reconsidérons maintenant la toute première approche proposée:
+
+```
+contractions(p, T):
+  si |p| = 1:
+    retourner (p[1] = x)
+  sinon:
+    pour i ∈ [1..|p|-1]:
+      gauche ← p[1 : i-1]
+      centre ← T[p[i], p[i+1]]
+      droite ← p[i+2 : |p|]
+
+      si contractions(gauche + centre + droite, T):
+        retourner vrai
+
+    retourner faux
+```
+
+Analysons _f(n)_ définie comme étant le nombre d'appels récursifs effectués par l'appel initial à ```contractions(p, T)```,
+où _n_ est la taille de ```p```. Nous avons _f(1) = 0_ car aucun appel n'est effectué au cas de base.
+En inspectant la boucle du cas général, on remarque que:
+
+```
+f(n) = (n-1) · (1 + f(n-1))
+     = (n-1) · f(n-1) + (n-1)
+```
+car il y a _n - 1_ appels sur des sous-séquences de taille _n-1_. Cette récurrence ressemble à la factorielle.
+Montrons par induction que _f(n) ≥ (n-1)!_ pour tout _n ≥ 2_. Nous avons _f(2) = 1 = 1!_. Soit _n > 2_. Nous avons
+
+```
+f(n) = (n-1) · f(n-1) + (n-1)    [par déf. de f(n)]
+     ≥ (n-1) · (n-2)! + (n-1)    [par hypothèse d'induction]
+     = (n-1)! + (n-1)
+     ≥ (n-1)!                    □
+```
+
+Par conséquent, nous avons _f ∈ Ω((n-1)!)_, ce qui n'est pas polynomial.
