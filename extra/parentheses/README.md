@@ -312,4 +312,4 @@ f(n) = (n-1) · f(n-1) + (n-1)    [par déf. de f(n)]
      ≥ (n-1)!                    □
 ```
 
-Par conséquent, nous avons _f ∈ Ω((n-1)!)_, ce qui n'est pas polynomial.
+Par conséquent, nous avons _f ∈ Ω((n-1)!)_, ce qui n'est ni polynomial, ni exponentiel.
