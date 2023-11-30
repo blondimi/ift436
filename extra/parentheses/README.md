@@ -272,5 +272,4 @@ qui se réécrit
 
 Nous avons donc _c₁ = 1/3_ et _c₂ = -1_, ce qui mène à _f(n) = ⅓·3<sup>n</sup> - 1 = 3<sup>n-1</sup> - 1_.
 
-Par conséquent, nous avons _f ∈ Θ(3ⁿ)_. Rappelons que _f_ dénote le nombre d'appels
-récursifs. Ainsi, le temps d'exécution de l'algorithme appartient à _Ω(3ⁿ)_.
+Par conséquent, nous avons _f ∈ Θ(3ⁿ)_, ce qui n'est pas polynomial.
