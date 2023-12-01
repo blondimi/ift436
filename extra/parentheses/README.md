@@ -43,7 +43,7 @@ dans le futur:
 contractions_avecmem(p, T):
   mem ← []
 
-  contractions'(s):
+  contractions_avecmem'(s):
     si s ∉ mem:
       si |s| = 1:
         mem[s] ← (s[1] = x)
@@ -55,7 +55,7 @@ contractions_avecmem(p, T):
           centre ← T[s[i], s[i+1]]
           droite ← s[i+2 : |s|]
 
-          si contractions'(gauche + centre + droite):
+          si contractions_avecmem'(gauche + centre + droite):
             peut_engendrer ← vrai
             quitter la boucle
 
