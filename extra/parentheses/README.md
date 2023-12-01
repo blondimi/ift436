@@ -212,8 +212,8 @@ coupes_sansmem(p, T):
       valeurs ← ∅
 
       pour i ∈ [2..|s|]
-        gauche  ← coupes'(s[1 : i-1])
-        droite  ← coupes'(s[i : |s|])
+        gauche  ← coupes_sansmem'(s[1 : i-1])
+        droite  ← coupes_sansmem'(s[i : |s|])
         valeurs ← valeurs ∪ {T[x, y] : x ∈ gauche, y ∈ droite}
 
       retourner valeurs
@@ -313,3 +313,13 @@ f(n) = (n-1) · f(n-1) + (n-1)    [par déf. de f(n)]
 ```
 
 Par conséquent, nous avons _f ∈ Ω((n-1)!)_, ce qui n'est ni polynomial, ni exponentiel.
+
+On peut également montrer que _f(n) ≤ n!_ pour tout _n ≥ 2_, ce qui implique que _f ∈ O(n!)_.
+En effet, nous avons _f(2) = 1 = 1!_, et pour _n > 2_:
+
+```
+f(n) = (n-1) · f(n-1) + (n-1)       [par déf. de f(n)]
+     ≤ (n-1) · (n-1)! + (n-1)       [par hypothèse d'induction]
+     = n · (n-1)! - (n-1)! + (n-1)
+     = n! + (n-1) - (n-1)!
+     ≤ n!                           [car (n-1) ≤ (n-1)!]      □
