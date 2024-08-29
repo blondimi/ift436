@@ -18,9 +18,9 @@ def max_iter(s):                   # Décompte du nombre d'opérations élément
 
 if __name__ == "__main__":
     # Exemple du nombre d'opérations élémentaires exécutées sur les
-    # entrées de taille 1, 2, 3 et 4
-    for n in range(0, 4):
-        entrees_taille_n = map(list, permutations(range(1, n+2)))
+    # entrées de taille 1, 2 et 3
+    for n in range(1, 3+1):
+        entrees_taille_n = map(list, permutations(range(1, n+1)))
 
         for s in entrees_taille_n:
             m, nb_oper = max_iter(s)
