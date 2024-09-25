@@ -1,0 +1,259 @@
+<html>
+  <head>
+    <title>Labyrinthe</title>
+  </head>
+  
+  <body>
+    <div style="text-align: center;">
+      <br /><br />
+      <canvas id="canvasAlgo" width="512" height="512"
+              style="border: 5px solid black;">
+      </canvas>
+      <div style="padding-top: 20px; display: flex;
+                  justify-content: center; align-items: center;">
+          <input type="range" min="1" max="7" value="3" id="sliderTaille"
+                 style="width: 175; margin-right: 14px;">
+          <button id="btnGenerer"
+                  style="border: none; padding: 8px 14px; font-size: 16px;
+		         margin-right: 14px;">
+              Générer
+          </button>
+          <button id="btnExplosion" disabled
+                  style="border: none; padding: 8px 14px; font-size: 18px;
+		         margin-right: 14px;">
+              💥
+          </button>
+          <button id="btnResoudre" disabled
+                  style="border: none; padding: 8px 14px; font-size: 18px;
+	                 margin-right: 14px;">
+              🔍
+          </button>
+          <select name="selMode" id="selMode">
+            <option value="bfs">Largeur</option>
+            <option value="dfs">Profondeur</option>
+          </select>
+      </div>
+    </div>
+
+    <script>
+     var slider  = document.getElementById("sliderTaille");
+     var btnGen  = document.getElementById("btnGenerer");
+     var btnExp  = document.getElementById("btnExplosion");
+     var btnRes  = document.getElementById("btnResoudre");
+     let selMode = document.getElementById("selMode");
+     let canvas  = document.getElementById("canvasAlgo");
+     let ctx     = canvas.getContext("2d");
+     let grille  = {cases: {}, taille:  0};
+     let animation;
+     
+     let saut = () => (canvas.width / grille.taille);
+
+     slider.addEventListener("change", ()  => redimensionner());
+     btnGen.addEventListener("click",  ()  => generer());
+     btnExp.addEventListener("click",  ()  => explosion());
+     btnRes.addEventListener("click",  ()  => resoudre((s) => s.pop()));
+
+     redimensionner();
+
+     function redimensionner()
+     {    
+         clearInterval(animation);
+	 
+         grille.taille = 2**slider.value;
+
+         for (let x = 0; x < grille.taille; x++) {
+             grille.cases[x] = {};
+             
+             for (let y = 0; y < grille.taille; y++) {
+                 grille.cases[x][y] = [];
+             }
+         }
+
+	 dessiner_grille();
+     }
+
+     function dessiner_grille()
+     {	 
+         ctx.clearRect(0, 0, canvas.width, canvas.height);
+	 
+         for (let x = 1; x < grille.taille; x++) {
+	     ctx.lineWidth   = 1;
+	     ctx.strokeStyle = "black";	     
+	     ctx.beginPath();
+	     ctx.moveTo(x * saut(), 0);
+	     ctx.lineTo(x * saut(), grille.taille * saut());
+	     ctx.stroke();
+	     
+	     ctx.beginPath();
+	     ctx.moveTo(0, x * saut());
+	     ctx.lineTo(grille.taille * saut(), x * saut());
+	     ctx.stroke();
+         }	 
+     }
+
+     function dessiner_destruction_mur(x, y, dx, dy)
+     {
+	 ctx.lineWidth   = 2;
+	 ctx.strokeStyle = "white";
+
+	 ctx.beginPath();
+	 ctx.moveTo((y + 0.5*(1 + dy + dx)) * saut(), (x + 0.5*(1 + dx + dy)) * saut());
+	 ctx.lineTo((y + 0.5*(1 + dy - dx)) * saut(), (x + 0.5*(1 + dx - dy)) * saut());
+	 ctx.stroke();
+     }
+
+     function contient([x, y])
+     {
+         return (0 <= x && x < grille.taille &&
+                 0 <= y && y < grille.taille);
+     }
+
+     function voisins([x, y])
+     {
+	 let V = [];
+	 
+	 for (let [dx, dy] of grille.cases[x][y]) {
+	     let [x_, y_] = [x + dx, y + dy];
+
+	     if (contient([x_, y_]))
+		 V.push([x_, y_]);
+	 }
+	 
+	 return V;
+     }
+      
+     function generer()
+     {
+	 redimensionner();
+
+	 // Initialisation
+         let a_traiter = [[0, 0]];
+	 let decouvert = {};
+
+         for (let x = 0; x < grille.taille; x++) {
+	     decouvert[x] = {};
+	     
+             for (let y = 0; y < grille.taille; y++) {
+		 decouvert[x][y] = false;
+	     }
+	 } 
+
+	 // Traiter le prochain sommet
+	 let traiter = function() {
+	     if (a_traiter.length > 0) {		 
+		 let [x, y] = a_traiter.pop();
+
+		 decouvert[x][y] = true;
+
+		 // Prendre les quatre directions au hasard
+		 const dir = [[0, -1], [1, 0], [0, 1], [-1, 0]].sort((a, b) => 0.5 - Math.random());
+
+		 for (let [dx, dy] of dir) {
+                     let [x_, y_] = [x + dx, y + dy];
+		     
+                     if (contient([x_, y_]) && !decouvert[x_][y_]) {
+			 decouvert[x_][y_] = true;
+
+			 a_traiter.push([x_, y_]);
+
+			 // Détruire le mur
+			 grille.cases[x][y].push([dx, dy]);
+			 grille.cases[x_][y_].push([-dx, -dy]);
+
+			 dessiner_destruction_mur(x, y, dx, dy);
+		     }
+		 }
+	     }
+             else {
+                 clearInterval(animation);
+		 btnResoudre.disabled  = false;
+		 btnExplosion.disabled = false;
+             }
+	 };
+	 
+	 btnResoudre.disabled  = true;
+	 btnExplosion.disabled = true;
+         animation = setInterval(traiter, 1);
+     }
+
+     function extraire(s) {
+         return (selMode.value == "bfs" ? s.shift() : s.pop());
+     }
+     
+     function resoudre()
+     {
+	 btnExplosion.disabled = true;
+
+	 // Parcours de la grille
+	 let depart = [0, 0];
+	 let cible  = [grille.taille - 1, grille.taille - 1];
+	 
+	 let candidats = [];
+	 let pred      = {};
+	 let termine   = false;
+	 
+	 candidats.push(depart);
+	 pred[depart] = null;
+	 
+	 while (candidats.length > 0 && !termine) {
+	     let u = extraire(candidats);
+	     
+	     for (let v of voisins(u)) {
+		 if (!(v in pred)) {
+		     pred[v] = u;
+
+		     if (v[0] == cible[0] && v[1] == cible[1]) {
+			 termine = true;
+			 break;
+		     }
+		     else
+			 candidats.push(v);
+		 }
+	     }
+	 }
+
+	 // Reconstruire le chemin de la cible vers le départ
+	 let sommet = cible;
+
+	 ctx.lineWidth   = saut() / 4;
+	 ctx.strokeStyle = "red";
+	 ctx.beginPath();
+	 ctx.moveTo((sommet[1] + 0.5) * saut(), (sommet[0] + 0.5) * saut());
+	 
+	 let traiter = function() {
+	     if (pred[sommet] != null) {
+		 sommet = pred[sommet];
+
+		 ctx.lineTo((sommet[1] + 0.5) * saut(), (sommet[0] + 0.5) * saut());
+		 ctx.stroke();
+	     }
+             else {
+		 clearInterval(animation);
+             }
+	 };
+
+	 btnResoudre.disabled = true;
+	 animation = setInterval(traiter, 50);
+     }
+
+     function explosion()
+     {
+         for (let x = 0; x < grille.taille; x++) {
+             for (let y = 0; y < grille.taille; y++) {
+		 for (let [dx, dy] of [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
+		     let [x_, y_] = [x + dx, y + dy];
+
+		     // Détruire le mur?
+		     if (contient([x_, y_]) && Math.random() < (1.0 / 16)) {
+			 grille.cases[x][y].push([dx, dy]);
+			 grille.cases[x_][y_].push([-dx, -dy]);
+			 
+			 dessiner_destruction_mur(x, y, dx, dy);
+		     }
+		 }
+	     }
+	 }
+     }
+    </script>
+  </body>
+</html>
